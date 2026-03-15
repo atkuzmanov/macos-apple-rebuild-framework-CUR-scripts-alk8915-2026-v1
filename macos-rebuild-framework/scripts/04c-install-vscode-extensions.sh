@@ -23,10 +23,10 @@ manifest="$ROOT_DIR/manifests/vscode-extensions.txt"
 log_info "Installing VS Code/Cursor extensions from $manifest (using $CODECLI)"
 while IFS= read -r ext; do
   [[ -z "$ext" || "$ext" =~ ^# ]] && continue
-  if $CODECLI --list-extensions 2>/dev/null | grep -Fxq "$ext"; then
+  if "$CODECLI" --list-extensions 2>/dev/null | grep -Fxq "$ext"; then
     log_info "Extension already installed: $ext"
   else
-    run_cmd $CODECLI --install-extension "$ext" 2>/dev/null || log_warn "Failed to install extension: $ext"
+    run_cmd "$CODECLI" --install-extension "$ext" 2>/dev/null || log_warn "Failed to install extension: $ext"
   fi
 done < "$manifest"
 

@@ -21,8 +21,8 @@ fi
 
 log_info "OS: $(sw_vers -productName) $(sw_vers -productVersion)"
 log_info "User: ${USER:-$(whoami)}"
-log_info "Home: $HOME"
-log_info "Profile: $PROFILE"
+log_info "Home: ${HOME:-<unset>}"
+log_info "Profile: ${PROFILE:-<not set>}"
 
 # Ensure we can run privileged commands when needed
 if command -v sudo >/dev/null 2>&1; then

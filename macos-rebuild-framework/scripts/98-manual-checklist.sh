@@ -3,7 +3,7 @@ set -Eeuo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT_DIR/lib/common.sh"
 
-cat <<'CHECKLIST' | tee -a "$RUN_LOG"
+cat <<'CHECKLIST' | tee -a "${RUN_LOG:-/dev/null}"
 
 Manual checklist after rebuild (macOS):
 

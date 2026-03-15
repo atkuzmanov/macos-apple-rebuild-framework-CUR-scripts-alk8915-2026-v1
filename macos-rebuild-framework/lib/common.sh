@@ -37,7 +37,8 @@ run_shell() {
 }
 
 load_profile() {
-  local file="$1"
+  local file="${1:-}"
+  [[ -f "$file" ]] || return 0
   # shellcheck disable=SC1090
   source "$file"
 }
