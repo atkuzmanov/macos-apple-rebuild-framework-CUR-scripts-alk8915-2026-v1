@@ -1,4 +1,5 @@
 # pipx packages. One per line.
+# Snapshot had no pipx list; run scripts/14-export-state.sh on macOS to capture pipx list.
 # pipx
 # uv
 # ruff

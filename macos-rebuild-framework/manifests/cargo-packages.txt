@@ -1,4 +1,5 @@
 # Cargo/rust tools. One per line.
+# Snapshot had none; run scripts/14-export-state.sh on macOS to capture cargo install --list.
 # bat
 # eza
 # fd-find

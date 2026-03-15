@@ -1,3 +1,4 @@
 # uv tool install list. One per line.
+# Snapshot had no uv tools; run scripts/14-export-state.sh on macOS to capture uv tool list.
 # pip
 # ruff

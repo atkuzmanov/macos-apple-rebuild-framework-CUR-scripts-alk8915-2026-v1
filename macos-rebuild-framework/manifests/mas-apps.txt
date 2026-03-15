@@ -1,5 +1,10 @@
-# Mac App Store app IDs (one per line). Install with: mas install <id>
-# Get IDs by running: mas list
-# Format: numeric ID only, or "ID App Name" (script uses first field as ID)
-# 425264550
-# 715768417
+# Mac App Store app IDs. Source: mac-software-inventory-2026-03-05-103827. Refresh with scripts/14-export-state.sh on macOS.
+1621435983
+425264550
+1627727841
+715768417
+988332475
+651952889
+1602333609
+1295203466
+639764244

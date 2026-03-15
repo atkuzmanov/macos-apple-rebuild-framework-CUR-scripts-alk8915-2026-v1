@@ -1,5 +1,10 @@
-# Homebrew taps. One per line (e.g. homebrew/cask, mas-cli/tap).
-# Run: brew tap <line>
-# Default taps (homebrew/core, homebrew/cask) are usually already present.
-# homebrew/bundle
-# mas-cli/tap
+# Homebrew taps. Source: mac-software-inventory-2026-03-05-103827. Refresh with scripts/14-export-state.sh on macOS.
+adoptopenjdk/openjdk
+homebrew/bundle
+homebrew/cask
+homebrew/core
+mas-cli/tap
+pivotal/tap
+specstoryai/tap
+spring-io/tap
+teamookla/speedtest

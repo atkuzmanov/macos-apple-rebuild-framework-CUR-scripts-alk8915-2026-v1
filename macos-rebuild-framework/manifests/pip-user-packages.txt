@@ -1,2 +1,3 @@
 # pip install --user packages. One per line.
+# Snapshot had conda/system env; run scripts/14-export-state.sh on macOS to capture your pip --user set.
 # Leave empty or comment out to skip.

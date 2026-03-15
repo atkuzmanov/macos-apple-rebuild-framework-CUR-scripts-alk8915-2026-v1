@@ -1,4 +1,5 @@
 # npm global packages. One per line.
+# Snapshot had none; run scripts/14-export-state.sh on macOS to capture npm -g list.
 # typescript
 # eslint
 # prettier
