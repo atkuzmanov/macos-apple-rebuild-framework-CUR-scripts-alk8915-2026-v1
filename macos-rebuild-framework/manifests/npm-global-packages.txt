@@ -1,0 +1,6 @@
+# npm global packages. One per line.
+# typescript
+# eslint
+# prettier
+# yarn
+# pnpm

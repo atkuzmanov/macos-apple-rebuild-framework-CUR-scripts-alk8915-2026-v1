@@ -1,0 +1,20 @@
+# Homebrew formulae (cli tools). One per line. Comments with # ignored.
+curl
+wget
+git
+gnupg
+jq
+fzf
+ripgrep
+zsh
+bash
+python@3.12
+node
+openssl@3
+ca-certificates
+# Optional: uncomment as needed
+# docker
+# colima
+# restic
+# rclone
+# wireshark

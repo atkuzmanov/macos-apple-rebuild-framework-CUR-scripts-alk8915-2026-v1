@@ -1,0 +1,6 @@
+# pipx packages. One per line.
+# pipx
+# uv
+# ruff
+# black
+# pre-commit

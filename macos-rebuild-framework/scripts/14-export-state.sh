@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export RUN_LOG="${RUN_LOG:-/dev/null}"
+source "$ROOT_DIR/lib/common.sh"
+
+if [[ -n "${RUN_EXPORTS:-}" ]] && ! want_feature RUN_EXPORTS; then
+  log_info "State export skipped by profile (RUN_EXPORTS=false)"
+  exit 0
+fi
+
+ensure_dir "$ROOT_DIR/state/exports"
+
+# Ensure brew on PATH
+[[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -x /usr/local/bin/brew ]] && eval "$(/usr/local/bin/brew shellenv)"
+
+log_info "Exporting package state (macOS)"
+
+if command -v brew >/dev/null 2>&1; then
+  brew list --formula | sort > "$ROOT_DIR/state/exports/brew-formula.txt"
+  brew list --cask | sort > "$ROOT_DIR/state/exports/brew-casks.txt"
+fi
+pipx list --short 2>/dev/null | sort > "$ROOT_DIR/state/exports/pipx-packages.txt" || true
+pipx list --json 2>/dev/null > "$ROOT_DIR/state/exports/pipx-list.json" || true
+python3 -m pip freeze --user 2>/dev/null | sort > "$ROOT_DIR/state/exports/pip-user-packages.txt" || true
+cargo install --list 2>/dev/null | awk -F' ' '/ v[0-9]/{print $1}' | sort -u > "$ROOT_DIR/state/exports/cargo-packages.txt" || true
+uv tool list 2>/dev/null | awk '{print $1}' | sort -u > "$ROOT_DIR/state/exports/uv-tools.txt" || true
+npm list -g --depth=0 2>/dev/null | sed '1,1d' | sed 's/.* //' | cut -d@ -f1 | sort -u > "$ROOT_DIR/state/exports/npm-global-packages.txt" || true
+
+TIMESTAMP="$(date +%F-%H%M%S)"
+MACOS_VERSION="$(sw_vers -productVersion 2>/dev/null || echo "unknown")"
+cat > "$ROOT_DIR/state/exports/collection-info.txt" <<META
+export_timestamp=$TIMESTAMP
+macos_version=$MACOS_VERSION
+hostname=$(hostname)
+kernel=$(uname -r)
+arch=$(uname -m)
+META
+
+# Copy to manifests/*-exported.txt for diff/review
+cp "$ROOT_DIR/state/exports/brew-formula.txt" "$ROOT_DIR/manifests/brew-packages-exported.txt" 2>/dev/null || true
+cp "$ROOT_DIR/state/exports/brew-casks.txt" "$ROOT_DIR/manifests/brew-casks-exported.txt" 2>/dev/null || true
+cp "$ROOT_DIR/state/exports/pipx-packages.txt" "$ROOT_DIR/manifests/pipx-packages-exported.txt" 2>/dev/null || true
+cp "$ROOT_DIR/state/exports/pip-user-packages.txt" "$ROOT_DIR/manifests/pip-user-packages-exported.txt" 2>/dev/null || true
+cp "$ROOT_DIR/state/exports/cargo-packages.txt" "$ROOT_DIR/manifests/cargo-packages-exported.txt" 2>/dev/null || true
+cp "$ROOT_DIR/state/exports/uv-tools.txt" "$ROOT_DIR/manifests/uv-tools-exported.txt" 2>/dev/null || true
+cp "$ROOT_DIR/state/exports/npm-global-packages.txt" "$ROOT_DIR/manifests/npm-global-packages-exported.txt" 2>/dev/null || true
+
+log_warn "Exports written to state/exports/ and manifests/*-exported.txt. Review diffs, then cp manifests/*-exported.txt to manifests/*.txt if satisfied, and commit."

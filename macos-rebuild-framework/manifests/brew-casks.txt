@@ -1,0 +1,9 @@
+# Homebrew casks (GUI apps). One per line. Comments with # ignored.
+# firefox
+# google-chrome
+# visual-studio-code
+# iterm2
+# slack
+# zoom
+# 1password
+# rectangle

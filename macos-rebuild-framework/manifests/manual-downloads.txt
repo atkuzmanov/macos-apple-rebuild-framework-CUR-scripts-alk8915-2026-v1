@@ -1,0 +1,3 @@
+# Apps/tools installed manually (e.g. .dmg, .pkg from vendor sites).
+# Document here for rebuild reference; install steps remain manual.
+# Example: Cursor, Docker Desktop, 1Password, etc.

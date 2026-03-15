@@ -1,0 +1,5 @@
+# Direct download URLs for vendor installers (one per line).
+# Optional second column: filename to save as.
+# Used by offline-bundle/collect-from-machine.sh and download-bundle.sh.
+# Example:
+# https://example.com/SomeApp.dmg  SomeApp.dmg

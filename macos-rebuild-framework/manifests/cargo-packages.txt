@@ -1,0 +1,6 @@
+# Cargo/rust tools. One per line.
+# bat
+# eza
+# fd-find
+# sd
+# du-dust
