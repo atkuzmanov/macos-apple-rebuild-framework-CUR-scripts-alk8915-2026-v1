@@ -1,0 +1,4 @@
+# VS Code / Cursor extension IDs (one per line). Install with: code --install-extension <id>
+# Export from current machine: code --list-extensions
+# ms-python.python
+# ms-python.vscode-pylance

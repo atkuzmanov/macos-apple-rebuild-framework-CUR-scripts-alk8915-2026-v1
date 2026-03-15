@@ -19,19 +19,23 @@ The rebuild process is orchestrated by `rebuild.sh` and runs scripts in order:
 1. `00-preflight.sh` – sanity checks (macOS only, user, basic tools)
 2. `01-system-prep.sh` – Xcode CLT, license
 3. `02-install-homebrew.sh` – Homebrew install/update
-4. `03-install-brew-packages.sh` – Homebrew formulae from manifest
-5. `04-install-brew-casks.sh` – Homebrew casks (GUI apps) from manifest
-6. `05-install-pipx.sh` – pipx tools
-7. `06-install-cargo.sh` – Rust/cargo tools
-8. `07-install-uv-tools.sh` – uv tools
-9. `08-install-npm-global.sh` – npm global packages
-10. `09-install-manual-apps.sh` – vendor/manual installers
-11. `10-install-chezmoi.sh` – install chezmoi
-12. `11-apply-chezmoi.sh` – apply dotfiles
-13. `12-post-chezmoi.sh` – post configuration
-14. `13-validate.sh` – validation checks
-15. `14-export-state.sh` – export installed state to state/exports and manifests/*-exported.txt
-16. `98-manual-checklist.sh` – manual checklist
+4. `02b-install-brew-taps.sh` – Homebrew taps from manifest
+5. `02c-install-brewfile.sh` – optional: `brew bundle` if Brewfile exists
+6. `03-install-brew-packages.sh` – Homebrew formulae from manifest
+7. `04-install-brew-casks.sh` – Homebrew casks (GUI apps) from manifest
+8. `04b-install-mas-apps.sh` – Mac App Store apps (profile: INSTALL_MAS_APPS)
+9. `04c-install-vscode-extensions.sh` – VS Code/Cursor extensions (profile: INSTALL_VSCODE_EXTENSIONS)
+10. `05-install-pipx.sh` – pipx tools
+11. `06-install-cargo.sh` – Rust/cargo tools
+12. `07-install-uv-tools.sh` – uv tools
+13. `08-install-npm-global.sh` – npm global packages
+14. `09-install-manual-apps.sh` – vendor/manual installers
+15. `10-install-chezmoi.sh` – install chezmoi
+16. `11-apply-chezmoi.sh` – apply dotfiles
+17. `12-post-chezmoi.sh` – post configuration
+18. `13-validate.sh` – validation checks
+19. `14-export-state.sh` – export state (brew, taps, mas, vscode, pipx, cargo, uv, npm) to state/exports and manifests/*-exported.txt
+20. `98-manual-checklist.sh` – manual checklist
 
 ## Responsibility Boundaries
 

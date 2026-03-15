@@ -32,6 +32,10 @@ macos-rebuild-framework/
 ├── manifests/
 │   ├── brew-packages.txt
 │   ├── brew-casks.txt
+│   ├── brew-taps.txt
+│   ├── Brewfile                 # optional: run brew bundle if present
+│   ├── mas-apps.txt              # Mac App Store app IDs
+│   ├── vscode-extensions.txt     # VS Code/Cursor extension IDs
 │   ├── pipx-packages.txt
 │   ├── cargo-packages.txt
 │   ├── uv-tools.txt
@@ -53,8 +57,12 @@ macos-rebuild-framework/
 │   ├── 00-preflight.sh
 │   ├── 01-system-prep.sh
 │   ├── 02-install-homebrew.sh
+│   ├── 02b-install-brew-taps.sh
+│   ├── 02c-install-brewfile.sh   # optional if Brewfile exists
 │   ├── 03-install-brew-packages.sh
 │   ├── 04-install-brew-casks.sh
+│   ├── 04b-install-mas-apps.sh
+│   ├── 04c-install-vscode-extensions.sh
 │   ├── 05-install-pipx.sh
 │   ├── 06-install-cargo.sh
 │   ├── 07-install-uv-tools.sh
@@ -140,7 +148,11 @@ Run only validation:
 
 Profiles live in `profiles/*.env`. Use them to toggle:
 
-- GUI apps (brew casks)
+- **INSTALL_MAS_APPS** – install Mac App Store apps from `manifests/mas-apps.txt` (requires `mas`, from Homebrew)
+- **INSTALL_VSCODE_EXTENSIONS** – install VS Code/Cursor extensions from `manifests/vscode-extensions.txt`
+
+- GUI apps (brew casks), Mac App Store (mas), VS Code extensions
+- Brew taps, optional Brewfile
 - pipx, cargo, uv, npm
 - Manual/vendor apps
 - Chezmoi and dotfiles

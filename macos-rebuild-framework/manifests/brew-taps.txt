@@ -1,0 +1,5 @@
+# Homebrew taps. One per line (e.g. homebrew/cask, mas-cli/tap).
+# Run: brew tap <line>
+# Default taps (homebrew/core, homebrew/cask) are usually already present.
+# homebrew/bundle
+# mas-cli/tap
