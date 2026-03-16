@@ -19,6 +19,7 @@ PROFILE=""
 OUTPUT_DIR=""
 usage() {
   echo "Usage: $0 --profile <name> [--output-dir <path>]"
+  echo "       $0 --profile=<name> [--output-dir=<path>]"
   echo "  Downloads all software from manifests into cache/ for offline installation on macOS."
   echo "  --output-dir  Optional. Where to download files (default: offline-bundle/cache)."
   echo "                Use this to download to an external drive or path with more space."
@@ -27,8 +28,10 @@ usage() {
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --profile) PROFILE="${2:-}"; shift 2 ;;
-    --output-dir) OUTPUT_DIR="${2:-}"; shift 2 ;;
+    --profile=*) PROFILE="${1#*=}"; shift ;;
+    --profile)   PROFILE="${2:-}"; shift 2 ;;
+    --output-dir=*) OUTPUT_DIR="${1#*=}"; shift ;;
+    --output-dir)   OUTPUT_DIR="${2:-}"; shift 2 ;;
     -h|--help) usage ;;
     *) log_error "Unknown: $1"; usage ;;
   esac
