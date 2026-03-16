@@ -94,7 +94,28 @@ fi
 # Cargo / uv / npm: lists only
 cargo install --list 2>/dev/null | awk -F' ' '/ v[0-9]/{print $1}' | sort -u > "$META_DIR/cargo-packages.txt" || true
 uv tool list 2>/dev/null | awk '{print $1}' | sort -u > "$META_DIR/uv-tools.txt" || true
-npm list -g --depth=0 2>/dev/null | sed '1,1d' | sed 's/.* //' | cut -d@ -f1 | sort -u > "$META_DIR/npm-global-packages.txt" || true
+# Use directory listing instead of "npm list -g" (npm list can Abort trap:6 on macOS;
+# also works when Node is broken e.g. icu4c upgrade). Try npm root first, fallback to common paths.
+npm_root=""
+if command -v npm >/dev/null 2>&1; then
+  npm_root=$(npm root -g 2>/dev/null) || true
+fi
+[[ -z "$npm_root" || ! -d "$npm_root" ]] && for p in /usr/local/lib/node_modules /opt/homebrew/lib/node_modules /usr/local/Cellar/node/*/lib/node_modules "$HOME/.nvm/versions/node/"*/lib/node_modules; do
+  [[ -d "$p" ]] && { npm_root="$p"; break; }
+done
+if [[ -n "$npm_root" && -d "$npm_root" ]]; then
+  {
+    for d in "$npm_root"/*; do
+      [[ -d "$d" ]] || continue
+      name=$(basename "$d")
+      if [[ "$name" == @* ]]; then
+        for p in "$d"/*; do [[ -d "$p" ]] && echo "${name}/$(basename "$p")"; done
+      else
+        echo "$name"
+      fi
+    done
+  } | sort -u > "$META_DIR/npm-global-packages.txt"
+fi
 
 # Vendor URLs
 VENDOR_URLS="$ROOT_DIR/manifests/vendor-download-urls.txt"
