@@ -54,6 +54,13 @@ log_info "Creating offline bundle for profile: $PROFILE (macOS)"
 
 mkdir -p "$CACHE_DIR"/{brew,pip,pipx,uv,npm,cargo,vendor,meta}
 
+# Redirect all tool caches to CACHE_DIR so downloads go directly to output (avoids filling internal disk)
+export HOMEBREW_CACHE="$CACHE_DIR/brew"
+export PIP_CACHE_DIR="$CACHE_DIR/pip/.pip-cache"
+export npm_config_cache="$CACHE_DIR/npm/.npm-cache"
+export CARGO_HOME="$CACHE_DIR/cargo"
+log_info "Tool caches redirected to output directory (avoids internal disk usage)"
+
 TIMESTAMP="$(date +%F-%H%M%S)"
 MACOS_VERSION="$(sw_vers -productVersion 2>/dev/null || echo "unknown")"
 cat > "$CACHE_DIR/meta/collection-info.txt" <<META
@@ -80,8 +87,6 @@ if command -v brew >/dev/null 2>&1; then
   if ((${#brew_pkgs[@]} > 0)); then
     log_info "Fetching ${#brew_pkgs[@]} formulae"
     run_cmd brew fetch "${brew_pkgs[@]}" --force 2>/dev/null || true
-    HOMEBREW_CACHE="${HOMEBREW_CACHE:-$(brew --cache)}"
-    [[ -d "$HOMEBREW_CACHE" ]] && run_cmd cp -Rn "$HOMEBREW_CACHE"/* "$CACHE_DIR/brew/" 2>/dev/null || true
   fi
 
   if want_feature INSTALL_BREW_CASKS && [[ -f "$ROOT_DIR/manifests/brew-casks.txt" ]]; then
@@ -93,8 +98,6 @@ if command -v brew >/dev/null 2>&1; then
     if ((${#cask_list[@]} > 0)); then
       log_info "Fetching ${#cask_list[@]} casks"
       for c in "${cask_list[@]}"; do run_cmd brew fetch --cask "$c" 2>/dev/null || true; done
-      HOMEBREW_CACHE="${HOMEBREW_CACHE:-$(brew --cache)}"
-      [[ -d "$HOMEBREW_CACHE" ]] && run_cmd cp -Rn "$HOMEBREW_CACHE"/* "$CACHE_DIR/brew/" 2>/dev/null || true
     fi
   fi
 
@@ -162,7 +165,6 @@ if want_feature INSTALL_CARGO && command -v cargo >/dev/null 2>&1 && [[ -f "$ROO
     [[ -z "$app" || "$app" =~ ^# ]] && continue
     cargo install "$app" 2>/dev/null || log_warn "Cargo install failed: $app"
   done < "$ROOT_DIR/manifests/cargo-packages.txt"
-  [[ -d "$HOME/.cargo/registry" ]] && run_cmd cp -a "$HOME/.cargo/registry" "$CACHE_DIR/cargo/" 2>/dev/null || log_warn "Could not copy cargo registry"
 fi
 
 # ---------------------------------------------------------------------------
