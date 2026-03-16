@@ -2,12 +2,11 @@
 set -Eeuo pipefail
 
 # Run when ONLINE. Downloads all packages from manifests into cache/ for offline use on macOS.
-# Usage: ./download-bundle.sh --profile <macbook|mac-mini>
+# Usage: ./download-bundle.sh --profile <macbook|mac-mini> [--output-dir <path>]
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUNDLE_DIR="$(cd "$SCRIPT_DIR" && pwd)"
 ROOT_DIR="$(cd "$BUNDLE_DIR/.." && pwd)"
-CACHE_DIR="$BUNDLE_DIR/cache"
 
 source "$ROOT_DIR/lib/common.sh"
 source "$ROOT_DIR/lib/logging.sh"
@@ -17,19 +16,32 @@ source "$ROOT_DIR/lib/logging.sh"
 [[ -x /usr/local/bin/brew ]] && eval "$(/usr/local/bin/brew shellenv)"
 
 PROFILE=""
+OUTPUT_DIR=""
 usage() {
-  echo "Usage: $0 --profile <name>"
+  echo "Usage: $0 --profile <name> [--output-dir <path>]"
   echo "  Downloads all software from manifests into cache/ for offline installation on macOS."
+  echo "  --output-dir  Optional. Where to download files (default: offline-bundle/cache)."
+  echo "                Use this to download to an external drive or path with more space."
   exit 1
 }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --profile) PROFILE="${2:-}"; shift 2 ;;
+    --output-dir) OUTPUT_DIR="${2:-}"; shift 2 ;;
     -h|--help) usage ;;
     *) log_error "Unknown: $1"; usage ;;
   esac
 done
+
+# Resolve cache directory: custom path or default (offline-bundle/cache)
+if [[ -n "$OUTPUT_DIR" ]]; then
+  CACHE_DIR="${OUTPUT_DIR/#\~/$HOME}"
+  [[ "$CACHE_DIR" != /* ]] && CACHE_DIR="$(pwd)/$CACHE_DIR"
+  log_info "Using custom output directory: $CACHE_DIR"
+else
+  CACHE_DIR="$BUNDLE_DIR/cache"
+fi
 
 [[ -n "$PROFILE" ]] || usage
 PROFILE_FILE="$ROOT_DIR/profiles/${PROFILE}.env"
