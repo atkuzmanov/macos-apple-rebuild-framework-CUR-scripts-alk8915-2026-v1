@@ -1,0 +1,5 @@
+export_timestamp=2026-03-16-180148
+macos_version=12.7.6
+hostname=Elena.local
+kernel=21.6.0
+arch=x86_64

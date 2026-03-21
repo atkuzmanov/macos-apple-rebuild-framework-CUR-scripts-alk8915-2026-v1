@@ -1,0 +1,8 @@
+@angular/cli
+angular-petstore
+markmon
+ng-openapi-gen
+node-sass
+npm
+typescript
+uri-js
